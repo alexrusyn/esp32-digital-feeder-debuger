@@ -15,8 +15,7 @@
 
 void app_main()
 {
-    initWiFi();
-    startServer();
+    initWifi();
 
     // encoder_init(ENC_A, ENC_B);
     // motor_init(STEP, DIR, EN);
