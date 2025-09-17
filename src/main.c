@@ -5,7 +5,8 @@
 // #include "motor/motor.h"
 // #include "control/control.h"
 
-#include "server/server.h"
+#include "fs_manager/fs_manager.h"
+#include "web_server/web_server.h"
 
 #define ENC_A 34
 #define ENC_B 35
@@ -15,7 +16,8 @@
 
 void app_main()
 {
-    initWifi();
+    filesystemMount();
+    startWebServer();
 
     // encoder_init(ENC_A, ENC_B);
     // motor_init(STEP, DIR, EN);

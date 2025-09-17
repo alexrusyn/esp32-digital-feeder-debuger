@@ -1,4 +1,4 @@
-#include "server.h"
+#include "net_config.h"
 
 #include <string.h>
 #include "esp_log.h"
@@ -13,6 +13,8 @@
 static const char *TAG = "HTTP_SERVER";
 
 static esp_netif_t *sta_netif;
+static httpd_handle_t server = NULL;
+static ip_ready_cb_t user_ip_cb = NULL;
 
 static void wifiConnectHandler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
 {
@@ -20,18 +22,20 @@ static void wifiConnectHandler(void *arg, esp_event_base_t event_base, int32_t e
     {
         ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
         ESP_LOGI(TAG, "Got IP:" IPSTR, IP2STR(&event->ip_info.ip));
-        startServer();
+
+        httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+
+        if (httpd_start(&server, &config) == ESP_OK && user_ip_cb)
+        {
+            user_ip_cb(server);
+        }
     }
 }
 
-esp_err_t rootGetHandler(httpd_req_t *req)
+void initWifi(ip_ready_cb_t user_cb)
 {
-    const char *resp_str = "Hello from ESP-IDF HTTP Server!";
-    return httpd_resp_send(req, resp_str, strlen(resp_str));
-}
+    user_ip_cb = user_cb;
 
-void initWifi(void)
-{
     // init NVS memory
     esp_err_t nvsFlashREsult = nvs_flash_init();
     if (nvsFlashREsult == ESP_ERR_NVS_NO_FREE_PAGES || nvsFlashREsult == ESP_ERR_NVS_NEW_VERSION_FOUND)
@@ -79,23 +83,4 @@ void initWifi(void)
     ESP_LOGI(TAG, "Connecting to WiFi: %s", WIFI_SSID);
 
     esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifiConnectHandler, NULL, NULL);
-}
-
-void startServer()
-{
-    httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-    httpd_handle_t server = NULL;
-
-    if (httpd_start(&server, &config) == ESP_OK)
-    {
-        httpd_uri_t root_uri = {
-            .uri = "/",
-            .method = HTTP_GET,
-            .handler = rootGetHandler,
-            .user_ctx = NULL,
-        };
-
-        httpd_register_uri_handler(server, &root_uri);
-        ESP_LOGI(TAG, "HTTP server started");
-    };
 }
