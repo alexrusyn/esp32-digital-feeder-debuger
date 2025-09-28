@@ -1,0 +1,21 @@
+name: Deploy client
+on:
+  push:
+    branches:
+      - structure-change
+jons:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci
+        working-directory: ./client
+      - run: npm run build
+        working-directory: ./client
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./client/build
