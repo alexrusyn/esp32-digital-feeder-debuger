@@ -9,5 +9,11 @@
         {
             "path": "client"
         }
-    ]
+    ],
+    "settings": {
+        "files.associations": {
+            "string.h": "c",
+            "esp_http_server.h": "c"
+        }
+    }
 }
