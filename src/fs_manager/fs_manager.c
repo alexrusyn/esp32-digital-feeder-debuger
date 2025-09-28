@@ -1,18 +1,22 @@
 #include "fs_manager.h"
 
+#include "dirent.h"
+
 #include "esp_spiffs.h"
 #include "esp_log.h"
 
 static const char *TAG = "FS";
+
+static const char *PARTITION_PATH = "/spiffs";
 static const char *PARTITION_LABEL = "storage";
 
 void filesystemMount()
 {
     esp_vfs_spiffs_conf_t conf = {
-        .base_path = "/spiffs",
+        .base_path = PARTITION_PATH,
         .partition_label = PARTITION_LABEL,
-        .max_files = 10,
-        .format_if_mount_failed = true,
+        .max_files = 5,
+        .format_if_mount_failed = false,
     };
 
     esp_err_t registerReturn = esp_vfs_spiffs_register(&conf);

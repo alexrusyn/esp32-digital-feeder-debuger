@@ -6,7 +6,7 @@ Import('env')
 env_path = ".env"
 
 if not isfile(env_path):
-    print("⚠️  File .env not found, skipping...")
+    print("❌ File .env not found, skipping...")
 else:
     build_flags = []
     with open(env_path, "r") as f:
