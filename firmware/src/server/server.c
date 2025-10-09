@@ -7,7 +7,7 @@ static void ipReadyCallback(httpd_handle_t server)
     registerApiRoutes(server);
 }
 
-void startWebServer(void)
+void startServer(void)
 {
     initWifi(&ipReadyCallback);
 }

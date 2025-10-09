@@ -5,6 +5,8 @@
 // #include "motor/motor.h"
 // #include "control/control.h"
 
+#include "led/led.h"
+
 #include "server/server.h"
 
 #define ENC_A 34
@@ -15,7 +17,7 @@
 
 void app_main()
 {
-    initWiFi();
+    initLed();
     startServer();
 
     // encoder_init(ENC_A, ENC_B);

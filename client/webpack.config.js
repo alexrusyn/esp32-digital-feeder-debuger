@@ -1,5 +1,8 @@
+const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const dotenv = require('dotenv');
+
 
 const PROJECT_ROOT = process.cwd();
 const port = process.env.PORT || 3000;
@@ -12,6 +15,8 @@ const PROJECT_PATHS = {
     public: path.join(PROJECT_ROOT, "public"),
 };
 
+dotenv.config();
+
 module.exports = ({ mode }) => ({
     mode: mode === 'production' ? 'production' : 'development',
     entry: PROJECT_PATHS.entry,
@@ -23,6 +28,9 @@ module.exports = ({ mode }) => ({
             template: `${PROJECT_PATHS.public}/index.html`,
             filename: "index.html",
         }),
+        new webpack.DefinePlugin({
+            API_KEY: JSON.stringify(process.env.API_KEY),
+        })
     ],
     devServer: {
         port,
