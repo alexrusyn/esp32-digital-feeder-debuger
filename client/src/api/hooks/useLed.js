@@ -8,7 +8,7 @@ const useLed = () => {
     const toggleLedState = useCallback((newState) => {
         ledController.setState(newState)
             .then((data) => {
-                console.info(data.message);
+                console.info(`${data.message} ${newState ? 'on' : 'off'}`);
                 setIsLedOn(newState);
             })
             .catch((e) => console.error(e.message))
