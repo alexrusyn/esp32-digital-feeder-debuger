@@ -1,21 +1,13 @@
-import { useCallback } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
+import { RouterProvider } from "react-router";
 
-import useLed from "./api/hooks/useLed";
+import { system } from "./theme";
+import { router } from "./routes";
 
-const App = () => {
-    const { isLedOn, toggleLedState } = useLed();
-
-    const clickHandler = useCallback(
-        () => toggleLedState(!isLedOn),
-        [isLedOn]
-    );
-
-    return (
-        <div>
-            <button onClick={clickHandler}>Toogle led</button>
-            <span>{isLedOn ? 'ON' : 'OFF'}</span>
-        </div>
-    )
-}
+const App = () => (
+  <ChakraProvider value={system}>
+    <RouterProvider router={router} />
+  </ChakraProvider>
+);
 
 export default App;
