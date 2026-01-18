@@ -1,11 +1,9 @@
-name: Build & Release Firmware
+name: Dev Firmware Release
 
 on:
   push:
     branches:
-      - master
-    tags:
-      - "v*"
+      - development
 
 jobs:
   build:
@@ -31,9 +29,13 @@ jobs:
           mkdir output
           cp firmware/.pio/build/esp32dev/firmware.bin output/firmware.bin
 
-      - name: Create GitHub Release
+      - name: Create Dev Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: dev-latest
+          name: Development release
+          prerelease: true
           files: output/firmware.bin
+          overwrite: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
