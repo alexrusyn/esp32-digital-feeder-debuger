@@ -30,6 +30,8 @@ module.exports = ({ mode }) => ({
         }),
         new webpack.DefinePlugin({
             API_KEY: JSON.stringify(process.env.API_KEY),
+            GITHUB_USER: JSON.stringify(process.env.GITHUB_USER),
+            GITHUB_REPO: JSON.stringify(process.env.GITHUB_REPO),
         })
     ],
     devServer: {

@@ -1,13 +1,27 @@
-import { Input, Listbox, useFilter, useListCollection } from "@chakra-ui/react";
+import { useEffect } from "react";
 
-const SelectList = ({ value, setValue, placeholder, items, title = null }) => {
+import {
+  Input,
+  Listbox,
+  useFilter,
+  useListCollection,
+  Badge,
+} from "@chakra-ui/react";
+
+import { MdTag } from "react-icons/md";
+
+const SelectList = ({ value, setValue, placeholder, data, title = null }) => {
   const { contains } = useFilter({ sensitivity: "base" });
 
-  const { collection, filter } = useListCollection({
-    initialItems: items,
+  const { collection, set, filter } = useListCollection({
+    initialItems: [],
     filter: contains,
     groupBy: (item) => item.type,
   });
+
+  useEffect(() => {
+    set(data);
+  }, [data]);
 
   return (
     <Listbox.Root
@@ -28,6 +42,10 @@ const SelectList = ({ value, setValue, placeholder, items, title = null }) => {
             {items.map((item) => (
               <Listbox.Item item={item} key={item.value}>
                 <Listbox.ItemText>{item.label}</Listbox.ItemText>
+                <Badge>
+                  <MdTag />
+                  {item.value}
+                </Badge>
                 <Listbox.ItemIndicator />
               </Listbox.Item>
             ))}
