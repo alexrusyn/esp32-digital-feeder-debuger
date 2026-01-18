@@ -6,12 +6,18 @@ import {
   MdOutlineLightbulb,
   MdLoupe,
   MdSettings,
+  MdBrowserUpdated,
 } from "react-icons/md";
+import { useCallback } from "react";
 
 const links = [
   { to: "/", label: "Dashboard", Icon: MdDashboardCustomize },
   { to: "/led", label: "Led Control", Icon: MdOutlineLightbulb },
   { to: "/servo", label: "Servo Control", Icon: MdLoupe },
+];
+
+const adminLinks = [
+  { to: "/update", label: "Firmware Update", Icon: MdBrowserUpdated },
 ];
 
 const ButtonLink = ({ to, label, children, isActive }) => (
@@ -29,23 +35,23 @@ const ButtonLink = ({ to, label, children, isActive }) => (
 const Sidebar = () => {
   const location = useLocation();
 
-  const getIsActive = (to) => location.pathname === to;
+  const getIsActive = useCallback((to) => location.pathname === to, [location]);
 
-  return (
-    <VStack w="70px" minH="100%" bg="bg" gap={4} p={4}>
-      {links.map(({ to, label, Icon }) => (
+  const renderLinks = useCallback(
+    (linkList) =>
+      linkList.map(({ to, label, Icon }) => (
         <ButtonLink to={to} key={label} isActive={getIsActive(to)}>
           <Icon />
         </ButtonLink>
-      ))}
+      )),
+    [getIsActive]
+  );
+
+  return (
+    <VStack w="70px" minH="100%" bg="bg" gap={4} p={4}>
+      {renderLinks(links)}
       <Spacer />
-      <ButtonLink
-        to={"/settings"}
-        key="Settings"
-        isActive={getIsActive("/settings")}
-      >
-        <MdSettings />
-      </ButtonLink>
+      {renderLinks(adminLinks)}
     </VStack>
   );
 };
