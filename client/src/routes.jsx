@@ -6,6 +6,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import Dashboard from "./pages/Dashboard";
 import LedControl from "./pages/LedControl";
 import ServoControl from "./pages/ServoControl";
+import FirmwareUpdate from "./pages/FirmwareUpdate";
 import Auth from "./pages/Auth";
 import NotFountPage from "./pages/NotFound";
 
@@ -26,6 +27,7 @@ export const router = createHashRouter([
       { index: true, element: <Dashboard /> },
       { path: "led", element: <LedControl /> },
       { path: "servo", element: <ServoControl /> },
+      { path: "update", element: <FirmwareUpdate /> },
     ],
   },
   {

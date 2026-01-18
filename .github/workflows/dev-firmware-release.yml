@@ -1,0 +1,41 @@
+name: Dev Firmware Release
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install PlatformioIO
+        run: pip install platformio
+
+      - name: Build firmware
+        working-directory: firmware
+        run: pio run
+
+      - name: Prepare artifacts
+        run: |
+          mkdir output
+          cp firmware/.pio/build/esp32dev/firmware.bin output/firmware.bin
+
+      - name: Create Dev Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: dev-latest
+          name: Development release
+          prerelease: true
+          files: output/firmware.bin
+          overwrite: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
